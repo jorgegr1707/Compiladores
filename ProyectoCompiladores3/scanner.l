@@ -3,9 +3,23 @@
 /*Universal Character Name*/
 /*Probablemente quitemos esta cuestion*/
 UCN			(\\u[0-9a-fA-F]{4}|\\U[0-9a-fA-F]{8})
-
-D   		[0-9]
-L			[a-zA-Z_]
+O   [0-7]
+D   [0-9]
+NZ  [1-9]
+L   [a-zA-Z_]
+A   [a-zA-Z_0-9]
+H   [a-fA-F0-9]
+HP  (0[xX])
+E   ([Ee][+-]?{D}+)
+P   ([Pp][+-]?{D}+)
+FS  (f|F|l|L)
+IS  (((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))
+CP  (u|U|L)
+SP  (u8|u|U|L)
+ES  (\\(['"\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+))
+WS  [ \t\v\n\f]
+alpha [a-zA-Z]
+digit [0-9]
 
 %{
 #include <stdio.h>
@@ -316,8 +330,8 @@ void count_column(void);
 <<EOF>>						{
 								yypop_buffer_state();
 								flag_define = 0;
-								
-								for(int i = total_includes - 1; i > 0; i--){
+								int i;
+								for(i = total_includes - 1; i > 0; i--){
 									
 									if(strcmp(files_to_read[i], "string") != 0){
 										curfilename = files_to_read[i];

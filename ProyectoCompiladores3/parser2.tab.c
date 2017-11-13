@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.4"
+#define YYBISON_VERSION "3.0.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -191,7 +191,7 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
+typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
 #line 17 "parser2.y" /* yacc.c:355  */
@@ -200,8 +200,6 @@ union YYSTYPE
 
 #line 202 "parser2.tab.c" /* yacc.c:355  */
 };
-
-typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -215,7 +213,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 219 "parser2.tab.c" /* yacc.c:358  */
+#line 217 "parser2.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -3143,8 +3141,14 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
+        case 2:
+#line 52 "parser2.y" /* yacc.c:1646  */
+    {pusht((yyvsp[0].sval));}
 #line 3148 "parser2.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 3152 "parser2.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3381,6 +3385,79 @@ extern char* actual_token;
 char* filename;
 
 
+
+struct Node
+{
+    char tag[5]; 
+    char data[100];
+    struct Node *next;
+    struct Node *previous;
+}*head, *tail; 
+
+
+void pusht(char *value)
+{
+     struct Node *var,*temp;
+     var=(struct Node *)malloc(sizeof(struct Node));
+             strncpy(var->tag, "type", sizeof ("type")+1);
+             strncpy(var->data, value, sizeof (value));
+     if(head==NULL)
+     {
+          head=var;
+          head->previous=NULL;
+          head->next=NULL;
+          tail=head;
+     }
+     else
+     {
+         tail=head;
+         while(tail!=NULL)
+         {
+             temp=tail;
+             tail=tail->next;
+         }
+     tail=var;
+     temp->next=tail;
+     tail->previous=temp;
+     tail->next=NULL;
+     }
+} 
+  
+int pop()
+{
+      struct Node *temp;
+      temp=tail;
+      if(temp->previous==NULL)
+      {
+           free(temp);
+           head=NULL;
+           tail=NULL;
+           return 0;
+      }
+      printf("\nSe borro el siguiente dato: %s \n",tail->data);
+      tail=temp->previous;
+      tail->next=NULL;
+      free(temp);
+      return 0;
+} 
+
+void imprimir()
+{
+     struct Node *temp;
+     temp=head;
+     if(temp==NULL)
+      {
+         printf("List is Empty");
+      }
+     while(temp!=NULL)
+     {
+
+        printf("%s | %s -> ",temp->tag,temp->data);
+        temp=temp->next;
+     }
+}
+
+
 int main(int argc, char**argv){
 	
 	filename = argv[1];
@@ -3389,6 +3466,8 @@ int main(int argc, char**argv){
 	do{
 		yyparse();
 	}while(!feof(yyin));
+
+    imprimir();
 }
 
 void yyerror(const char *s)
@@ -3449,3 +3528,4 @@ void yyerror(const char *s)
 	fclose(f);
 	printf("\n");
 }
+

@@ -13,7 +13,7 @@ int main(int argc, char** argv){
 	}
 
 	while(colacho != 10){
-		colacho++
+		colacho++;
 	}
 	
 }

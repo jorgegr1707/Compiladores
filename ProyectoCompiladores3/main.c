@@ -25,9 +25,9 @@ int main(int argc, char **argv){
 			char command[100] ;
 			strcpy(command, "./a.out ");
 			strcat(command, argv[1]);
-			//system("bison -d parser2.y");
-			//system("flex scanner.l");
-			//system("cc parser2.tab.c lex.yy.c -lfl");
+			system("bison -d parser2.y");
+			system("flex scanner.l");
+			system("cc parser2.tab.c lex.yy.c -lfl");
 			system(command);		
 		}
 		else{
