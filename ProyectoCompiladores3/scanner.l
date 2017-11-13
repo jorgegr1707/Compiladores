@@ -193,7 +193,7 @@ void count_column(void);
 
 "#"[ \t]*include[ \t]*[\"]	{BEGIN INCLUDE_CASE2;}
 
-<INCLUDE_CASE2>[^\t\n\"]+	{
+<INCLUDE_CASE2>[^\t\n\>]+	{
 								{
 									int c;
 									while((c = input()) && c != '\n');
@@ -216,15 +216,11 @@ void count_column(void);
 								}
 								else{
 								//yy_switch_to_buffer(yy_create_buffer ( yyin, YY_BUF_SIZE));
-									files_to_read[total_includes++] = path;
-									curfilename = path;
-									lines[count_files] = line;
-									columns[count_files] = column;
-									count_files++;
-									line = 1;
-									column = 1;
-									yyin = fopen(path, "r");	
-									yypush_buffer_state(yy_create_buffer(yyin, YY_BUF_SIZE));
+									char command[100];
+									strcpy(command, "./preprocess ");
+									strcat(command, path);
+									system(command);
+									
 								}
 								BEGIN INITIAL;
 							}
